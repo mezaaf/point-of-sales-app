@@ -1,7 +1,7 @@
 import Success from "./_components/success";
 
 export const metadata = {
-  title: "WPU Cafe | Payment Success",
+  title: "ZAF Cafe | Payment Success",
 };
 
 export default function SuccessPage() {

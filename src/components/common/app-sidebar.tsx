@@ -31,6 +31,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../ui/sidebar";
+import Link from "next/link";
 
 export default function AppSidebar() {
   const { isMobile } = useSidebar();
@@ -46,7 +47,7 @@ export default function AppSidebar() {
                 <div className="bg-teal-500 flex p-2 items-center justify-center rounded-md">
                   <Coffee className="size-4" />
                 </div>{" "}
-                WPU Cafe
+                ZAF Cafe
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -60,7 +61,7 @@ export default function AppSidebar() {
                 (item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild tooltip={item.title}>
-                      <a
+                      <Link
                         href={item.url}
                         className={cn("px-4 py-3 h-auto", {
                           "bg-teal-500 text-white hover:bg-teal-500 hover:text-white":
@@ -69,7 +70,7 @@ export default function AppSidebar() {
                       >
                         {item.icon && <item.icon />}
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 )

@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AuthFormState } from "@/types/auth";
 import { loginFormSchema } from "@/validations/auth-validation";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function login(
@@ -66,4 +66,22 @@ export async function login(
 
   revalidatePath("/", "layout");
   redirect("/");
+}
+
+export async function loginWithGoogle() {
+  const origin = (await headers()).get("origin");
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    redirect("/error");
+  }
+
+  redirect(data.url);
 }

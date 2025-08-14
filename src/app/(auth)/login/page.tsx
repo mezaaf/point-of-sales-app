@@ -1,7 +1,7 @@
 import Login from "./_components/login";
 
 export const metadata = {
-  title: "WPU Cafe | Login",
+  title: "ZAF Cafe | Login",
 };
 
 const LoginPage = () => {

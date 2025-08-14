@@ -22,7 +22,7 @@ export default function CardMenu({
         className="w-full object-cover rounded-t-lg"
       />
       <CardContent className="px-4 py-2">
-        <h3 className="text-lg font-semibold">{menu.name}</h3>
+        <h1 className="text-lg font-semibold">{menu.name}</h1>
         <p className="text-sm text-muted-foreground line-clamp-2">
           {menu.description}
         </p>

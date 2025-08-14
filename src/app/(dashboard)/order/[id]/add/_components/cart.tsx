@@ -44,7 +44,7 @@ export default function CartSection({
   return (
     <Card className="w-full shadow-sm">
       <CardContent className="space-y-4">
-        <h3 className="text-lg font-semibold">Customer Information</h3>
+        <h1 className="text-lg font-semibold">Customer Information</h1>
         {order && (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -62,7 +62,7 @@ export default function CartSection({
         )}
         <Separator />
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Cart</h3>
+          <h1 className="text-lg font-semibold">Cart</h1>
           {carts.length > 0 ? (
             carts.map((item) => (
               <div key={item.menu.id} className="space-y-2">
