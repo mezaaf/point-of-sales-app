@@ -12,12 +12,26 @@ import { createClientSupabase } from "@/lib/supabase/default";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth-store";
 import { useQuery } from "@tanstack/react-query";
-import { Ban, Link2Icon, ScrollText } from "lucide-react";
+import { Ban, Link2Icon, Package, ScrollText, Utensils } from "lucide-react";
 import Link from "next/link";
-import { startTransition, useActionState, useEffect, useMemo } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { toast } from "sonner";
 import { updateReservation } from "../actions";
-import DialogCreateOrder from "./dialog-create-order";
+import DialogCreateOrderDineIn from "./dialog-create-order-dine-in";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import DialogCreateOrderTakeaway from "./dialog-create-order-takeaway";
 
 export default function OrderManagement() {
   const profile = useAuthStore((state) => state.profile);
@@ -174,7 +188,7 @@ export default function OrderManagement() {
         ,
         order.order_id,
         order.customer_name,
-        (order.tables as unknown as { name: string }).name,
+        (order.tables as unknown as { name: string })?.name || "Takeaway",
         <div
           className={cn("px-2 py-1 rounded-full text-white w-fit capitalize", {
             "bg-lime-600": order.status === "settled",
@@ -193,7 +207,7 @@ export default function OrderManagement() {
                   action: () =>
                     item.action(
                       order.id,
-                      (order.tables as unknown as { id: string }).id
+                      (order.tables as unknown as { id: string })?.id
                     ),
                 }))
               : [
@@ -215,6 +229,8 @@ export default function OrderManagement() {
     });
   }, [orders]);
 
+  const [openCreateOrder, setOpenCreateOrder] = useState(false);
+
   return (
     <div className="w-full">
       <div className="flex flex-col lg:flex-row mb-4 gap-2 justify-between w-full">
@@ -225,12 +241,39 @@ export default function OrderManagement() {
             onChange={(e) => handleChangeSearch(e.target.value)}
           />
           {profile.role !== "kitchen" && (
-            <Dialog>
-              <DialogTrigger asChild>
+            <DropdownMenu
+              open={openCreateOrder}
+              onOpenChange={setOpenCreateOrder}
+            >
+              <DropdownMenuTrigger asChild>
                 <Button variant={"outline"}>Create</Button>
-              </DialogTrigger>
-              <DialogCreateOrder tables={tables} />
-            </Dialog>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel className="font-bold">
+                  Create Order
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <Dialog>
+                  <DialogTrigger className="flex items-center gap-2 text-sm p-2 hover:bg-muted w-full rounded-md">
+                    <Utensils className="size-4" />
+                    Dine In
+                  </DialogTrigger>
+                  <DialogCreateOrderDineIn
+                    tables={tables}
+                    closeDialog={() => setOpenCreateOrder(false)}
+                  />
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger className="flex items-center gap-2 text-sm p-2 hover:bg-muted w-full rounded-md">
+                    <Package className="size-4" />
+                    Takeaway
+                  </DialogTrigger>
+                  <DialogCreateOrderTakeaway
+                    closeDialog={() => setOpenCreateOrder(false)}
+                  />
+                </Dialog>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
       </div>

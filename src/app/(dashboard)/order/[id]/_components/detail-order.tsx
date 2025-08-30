@@ -136,19 +136,19 @@ export default function DetailOrder({ id }: { id: string }) {
         <div className="flex items-center gap-2">
           <Image
             src={item.menus.image_url}
-            alt={item.menus.name}
+            alt={item.menus?.name}
             width={40}
             height={40}
             className="rounded"
           />
           <div className="flex flex-col">
-            {item.menus.name} x {item.quantity}
+            {item.menus?.name} x {item.quantity}
             <span className="text-xs text-muted-foreground">
               {item.notes ?? "No Notes"}
             </span>
           </div>
         </div>,
-        <div>{convertIDR(item.menus.price * item.quantity)}</div>,
+        <div>{convertIDR(item.nominal)}</div>,
         <div
           className={cn("px-2 py-1 rounded-full text-white w-fit capitalize", {
             "bg-gray-500": item.status === "pending",

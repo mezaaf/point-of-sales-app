@@ -17,7 +17,13 @@ const Receipt = ({
     created_at: string;
   };
   orderMenu:
-    | { menus: Menu; quantity: number; status: string; id: string }[]
+    | {
+        menus: Menu;
+        quantity: number;
+        nominal: number;
+        status: string;
+        id: string;
+      }[]
     | null
     | undefined;
   orderId: string;
@@ -43,17 +49,11 @@ const Receipt = ({
           <p>
             Table:{" "}
             <span className="font-bold">
-              {(order.tables as unknown as { name: string }).name}
+              {(order?.tables as unknown as { name: string })?.name}
             </span>
           </p>
           <p>
-            Customer:{" "}
-            <span className="font-bold">
-              {
-                (order.tables as unknown as { customer_name: string })
-                  .customer_name
-              }
-            </span>
+            Customer: <span className="font-bold">{order.customer_name}</span>
           </p>
           <p>
             Date:{" "}

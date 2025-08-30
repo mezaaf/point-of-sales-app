@@ -22,9 +22,10 @@ export default function Summary({
     customer_name: string;
     tables: { name: string }[];
     status: string;
+    payment_token: string;
   };
   orderMenu:
-    | { menus: Menu; quantity: number; status: string }[]
+    | { menus: Menu; quantity: number; nominal: number; status: string }[]
     | null
     | undefined;
   id: string;
@@ -42,14 +43,18 @@ export default function Summary({
   ] = useActionState(generatePayment, INITIAL_STATE_GENERATE_PAYMENT);
 
   const handleGeneratePayment = () => {
-    const formData = new FormData();
-    formData.append("id", id || "");
-    formData.append("gross_amount", grandTotal.toString());
-    formData.append("customer_name", order.customer_name || "");
+    if (order?.payment_token) {
+      window.snap.pay(order.payment_token);
+    } else {
+      const formData = new FormData();
+      formData.append("id", id || "");
+      formData.append("gross_amount", grandTotal.toString());
+      formData.append("customer_name", order.customer_name || "");
 
-    startTransition(() => {
-      generatePaymentAction(formData);
-    });
+      startTransition(() => {
+        generatePaymentAction(formData);
+      });
+    }
   };
 
   useEffect(() => {
@@ -77,7 +82,10 @@ export default function Summary({
             <div className="space-y-2">
               <Label>Table</Label>
               <Input
-                value={(order.tables as unknown as { name: string })?.name}
+                value={
+                  (order.tables as unknown as { name: string })?.name ||
+                  "Takeaway"
+                }
                 disabled
               />
             </div>

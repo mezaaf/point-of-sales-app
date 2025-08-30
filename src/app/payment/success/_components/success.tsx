@@ -26,7 +26,7 @@ export default function Success() {
         .select()
         .single();
 
-      if (data) {
+      if (data && data.table_id) {
         await supabase
           .from("tables")
           .update({
